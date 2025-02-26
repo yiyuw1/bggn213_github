@@ -1,0 +1,75 @@
+---
+title: 'Wk6: Genome Informatics'
+author: "Yiyu"
+date: "2025-02-14"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Section 1. Proportion of G/G population
+
+Downloaded a CSV file from Ensemble < https://useast.ensembl.org/Homo_sapiens/Variation/Sample?db=core;r=17:39895035-39895162;v=rs8067378;vdb=variation;vf=959672880#373531_tablePanel
+
+Here we read the CSV file
+
+```{r}
+mxl <- read.csv("373531-SampleGenotypes-Homo_sapiens_Variation_Sample_rs8067378.csv")
+head(mxl)
+```
+
+```{r}
+table(mxl$Genotype..forward.strand.)
+```
+
+```{r}
+table(mxl$Genotype..forward.strand.)/nrow(mxl) *100
+```
+
+#Section 4: Population Scale Analysis [HOMEWORK]
+One sample is obviously not enough to know what is happening in a population. You are
+interested in assessing genetic differences on a population scale. So, you processed about
+~230 samples and did the normalization on a genome level. Now, you want to find whether
+there is any association of the 4 asthma-associated SNPs (rs8067378…) on ORMDL3
+expression.
+
+How many samples do we have?
+
+```{r}
+expr <- read.table("rs8067378_ENSG00000172057.6.txt")
+head(expr)
+```
+
+```{r}
+nrow(expr)
+```
+> Q13. Determine sample size for each genotype and their corresponding median expression levels for each of these genotypes.
+
+```{r}
+table(expr$geno)
+```
+Sample size for A/A is 108, A/G is 233, G/G is 121.
+
+```{r}
+library(dplyr)
+median <- expr |>
+  group_by(geno) |>
+  summarize(median_expression = median(exp))
+print(median)
+```
+Can use **dplyr** package to print median expression for each genotype using the `group_by` function.
+
+```{r}
+library(ggplot2)
+```
+
+>Q14. Generate a boxplot wiht a box per genotype, what could you infer from the relative expression value between A/A and G/G displayed in this plot? Does the SNP affect the expression of ORMDL3?
+
+Let's make a boxplot with our data
+```{r}
+ggplot(expr) + aes(geno, exp, fill = geno) +
+  geom_boxplot(notch = TRUE)
+```
+Yes, the box plot indicates that having G/G correlates to reduced expression of ORMDL3 gene, while A/A correlates to higher expression.

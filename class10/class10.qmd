@@ -1,0 +1,239 @@
+---
+title: "Class 10: Structural Bioinformatics (pt1)"
+author: "Yiyu"
+format: pdf
+toc: TRUE
+---
+
+## 1. The PDB database
+
+The main repository of biomolecular data is called the PDB (Protein Data Bank) and can be found at: https://www.rcsb.org/
+
+Let's see what it contains in terms of type of molecule and method of strucutre determination (Analyze > PDB Stats > By Mol Type and Method)
+
+```{r}
+pdbstats <- read.csv("Data Export Summary.csv")
+pdbstats
+```
+> Q1: What percentage of structures in the PDB are solved by X-Ray and Electron Microscopy.
+
+```{r}
+nocomma <- sub(",","", pdbstats$X.ray)
+sum(as.numeric(nocomma))
+```
+Let's try the **readr** package and its newer `read_csv()` function.
+
+```{r}
+library(readr)
+
+pdbstats <- read_csv("Data Export Summary.csv")
+pdbstats
+```
+
+The resulting column names are "untidy" with the spaces and mix of upper and lower case letters that will make working with the columns a pain. We'll use the **janitor** package and it's `clean_names()` function to clean up the untidy columns.
+
+
+```{r}
+colnames(pdbstats)
+```
+
+```{r}
+library(janitor)
+
+pdbstats <- clean_names(pdbstats)
+```
+> Q1: What percentage of structures in the PDB are solved by X-Ray and Electron Microscopy.
+
+```{r}
+n.total <- sum(pdbstats$total)
+n.xray <- sum(pdbstats$x_ray)
+
+n.xray
+n.total
+
+```
+
+In UniProt, there are 253,206,171 sequences, and there are only 231,029 known structures in the PDB. This is a tiny fraction!!!!
+
+```{r}
+n.total / 253206171 * 100
+```
+Next clss we will see how bioinformatics methods can help predict structure from sequence with accuracy approaching x-ray methods.
+
+
+```{r}
+n.xray/n.total * 100
+```
+82.8% are solved by x ray.
+
+```{r}
+n.em <- sum(pdbstats$em)
+
+n.em
+n.total
+
+```
+
+```{r}
+n.em/n.total * 100
+```
+10.8% are solved by em.
+
+> Q2: What proportion of structures in the PDB are protein?
+
+```{r}
+round(pdbstats$total[1] / n.total * 100, digits = 2)
+```
+86.2% of structures in PDB are protein.
+
+>Q3. Type HIV in the PDB website search box on the home page and determine how many HIV-1 protease structures are in the current PDB?
+
+	There are experimental (27,589)
+
+## 2. Molecular visualization with Mol*
+
+Mol-star is a new online structure viewer that is taking over the wold of biomolecular visualization. Let's see how to use it from https://molstar.org/viewer/ 
+
+My first mage from Mol* of HIV-Pr
+
+![Fig.1 A first view of HIV-PR dimer PDB: 1HSG](1HSG.png)
+
+I want an image that shows the binding cleft for the MK1 inhibitor, an image of the most valuable water in human history, and an image showing the catalytic ASP amino-acids.
+
+![Fig.2 1HSG surface](1HSG_surface.png)
+
+![Fig.3 1HSG surface with ligand as spacefill](1HSG_ligandfill.png)
+
+![Fig.4 Closer look with H2O 308 and catalytic asp residue](1HSG_asp_h2o.png)
+
+## 3. Using the Bio3D package
+
+This package has tons of tools and utilities for structural bioinformatics.
+
+```{r}
+library(bio3d)
+
+hiv <- read.pdb("1hsg")
+hiv
+```
+
+```{r}
+head(hiv$atom)
+```
+```{r}
+s <- pdbseq(hiv)
+head(s)
+```
+> Q.How long is this sequence /  how many amino acids are in the structure?
+
+```{r}
+length(s)
+```
+## Predict the functional motions
+
+Let's read a new structure "6s36"
+
+```{r}
+pdb <- read.pdb("6s36")
+pdb
+```
+We can run a NMA calculation on this structure: 
+
+```{r}
+m <- nma(pdb)
+plot(m, sse=pdb)
+```
+
+We can write out a trajectory of the predicted dynamics using the `mktrj()` function
+
+```{r}
+mktrj(m, file="results.pdb")
+```
+
+## 4. Comparative structure analysis of Adenylate Kinase
+
+```{r}
+aa <- get.seq("1ake_A")
+aa
+```
+
+Search the PDB database for related sequences
+
+```{r}
+blast <- blast.pdb(aa)
+hits <- plot(blast)
+```
+
+```{r}
+head(blast$raw)
+```
+```{r}
+hits$pdb.id
+```
+Download all these structures to our project directory.
+
+```{r}
+#Download related PDB files
+files <- get.pdb(hits$pdb.id, path="pdbs", split=TRUE, gzip=TRUE)
+```
+
+```{r}
+# Align releated PDBs
+pdbs <- pdbaln(files, fit = TRUE, exefile="msa")
+```
+
+```{r,fig.width=10, fig.height=8}
+# Vector containing PDB codes for figure axis
+ids <- basename.pdb(pdbs$id)
+# Draw schematic alignment
+plot(pdbs, labels=ids)
+```
+
+
+```{r}
+# Perform PCA
+pc.xray <- pca(pdbs)
+plot(pc.xray)
+```
+
+```{r}
+plot(pc.xray, pc.axes = c(1,2))
+```
+
+```{r}
+# Calculate RMSD
+rd <- rmsd(pdbs)
+
+# Structure-based clustering
+hc.rd <- hclust(dist(rd))
+grps.rd <- cutree(hc.rd, k=3)
+
+plot(pc.xray, 1:2, col="grey50", bg=grps.rd, pch=21, cex=1)
+```
+
+We can view the main PC1 captured displacements with the mktrj function again:
+
+```{r}
+# Visualize first principal component
+pc1 <- mktrj(pc.xray, pc=1, file="pc_1.pdb")
+```
+
+```{r}
+#Plotting results with ggplot2
+library(ggplot2)
+library(ggrepel)
+
+df <- data.frame(PC1=pc.xray$z[,1], 
+                 PC2=pc.xray$z[,2], 
+                 col=as.factor(grps.rd),
+                 ids=ids)
+
+p <- ggplot(df) + 
+  aes(PC1, PC2, col=col, label=ids) +
+  geom_point(size=2) +
+  geom_text_repel(max.overlaps = 20) +
+  theme(legend.position = "none")
+p
+```
+
+

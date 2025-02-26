@@ -1,0 +1,35 @@
+---
+title: "copilot test"
+format: html
+---
+
+Make some ggplot graphs of the mtcars dataset with point sizes based on number of cylinders. 
+```{r}
+library(ggplot2) 
+
+ggplot(mtcars, aes(x=wt, y=mpg, size=factor(cyl))) +
+  geom_point() +
+  labs(title="Scatterplot of wt vs mpg",
+       x="Miles per gallon (mpg)",
+       y="Displacement (disp)",
+       size="Number of cylinders (cyl)")
+
+```
+
+Read a pdb file
+
+```{r}
+library(bio3d)
+```
+
+```{r}
+pdb <- read.pdb("1a0m")
+pdb
+```
+
+Do nma analysis of the pdb file and plot 
+```{r}
+nma <- nma(pdb)
+plot(nma)
+```
+
