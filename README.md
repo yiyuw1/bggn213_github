@@ -8,4 +8,4 @@ Winter 2025 class content:
 
 - Class 05 Data viz with ggplot2
 
-- Class 06
+- Class 06 [R functions](https://github.com/yiyuw1/bggn213_github/blob/main/class6/class6.qmd) 
