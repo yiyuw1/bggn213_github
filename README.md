@@ -30,8 +30,8 @@ Winter 2025 class content:
 
 - Class 16 Essential UNIX for bioinformatics
 
-- Class 17 [Analyzing sequencing data in the cloud](class17/class17.html)
+- Class 17 [Analyzing sequencing data in the cloud]
 
 - Class 18 [Investigating pertussis resurgence mini project](class18/class18.html)
 
-- Class 19 [Mini Project: Cancer Mutation Analysis](class19/class19_mutationalanalysis.html)
+- Class 19 [Mini Project: Cancer Mutation Analysis](class19/class19_mutationanalysis.html)
