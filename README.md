@@ -6,7 +6,7 @@ Winter 2025 class content:
 
 - Class 04 [Intro to R]()
 
-- Class 05 [Data viz with ggplot2](https://github.com/yiyuw1/bggn213_github/blob/main/class5/class5.qmd)
+- Class 05 [Data viz with ggplot2](class05/class5.html)
 
 - Class 06 [R functions](https://github.com/yiyuw1/bggn213_github/blob/main/class6/class6.qmd) 
 
