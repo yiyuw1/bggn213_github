@@ -1,0 +1,60 @@
+---
+title: "class19"
+format: html
+---
+
+```{r}
+library(bio3d)
+```
+
+Load package to read fasta and then read fasta file to get sequences.
+```{r}
+read.fasta("A15970666_mutant_seq.fa")
+```
+
+Can use the conserv function to help identify mutation locations.
+```{r}
+s <- read.fasta("A15970666_mutant_seq.fa")
+score <- conserv(s)
+```
+
+Find elements where `score` is not equal to 1.
+```{r}
+inds <- score != 1.0
+```
+
+```{r}
+which(inds)
+positions <- which(inds)
+```
+How can I format this to give an answer like A130T
+
+```{r}
+s$ali[1,positions]
+positions
+s$ali[2, positions]
+```
+ 
+ Can format this in the conventional way (e.g. "L84V") with the`paste()` function
+ 
+```{r}
+paste(s$ali[1,positions],
+      positions, 
+      s$ali[2, positions],
+      sep = "")
+
+```
+ 
+ Now do it for a different sequence
+```{r}
+s2 <- read.fasta("A69038031_mutant_seq.fa")
+score <- conserv(s2)
+inds <- score != 1.0
+positions <- which(inds)
+paste(s2$ali[1,positions],
+      positions, 
+      s2$ali[2, positions],
+      sep = "")
+```
+
+

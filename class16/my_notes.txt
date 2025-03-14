@@ -1,0 +1,37 @@
+This is just a basic text editor:
+
+pwd: Print Working Directory (where are we)
+ls: LiSt (list out files and directories in a given location)
+cd: Change Directory
+mkdir: MaKk DIRrectory (make a new folder)
+nano: simple text editor that is avaiable everywhere
+PATH: the location of a file or folder from the root of the file system
+less: pager to see the text file
+head: view top of file
+tail: view bottom of file 
+
+ssh: open a shell on a remote computer
+ssh barry@big.computer.ucsd.com
+
+Open an SSH client.
+
+Locate your private key file. The key used to launch this instance is bggn213_yyw.pem
+
+Run this command, if necessary, to ensure your key is not publicly viewable.
+chmod 400 "bggn213_yyw.pem"
+
+Connect to your instance using its Public DNS:
+ec2-35-89-246-192.us-west-2.compute.amazonaws.com
+
+Example:
+
+ssh -i ~/Downloads/bggn213_yyw.pem ubuntu@ec2-35-89-246-192.us-west-2.compute.amazonaws.com
+
+chmod 400 ~/Downloads/bggn213_yyw.pem
+
+scp -i ~/Downloads/bggn213_yyw.pem ubuntu@ec2-35-89-246-192.us-west-2.compute.amazonaws.com:~/work/my_results.txt .
+
+Other useful unix commands:
+
+^C to kill process
+^Z to put process to sleep BG FG TOP
