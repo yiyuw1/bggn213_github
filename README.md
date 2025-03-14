@@ -34,4 +34,4 @@ Winter 2025 class content:
 
 - Class 18 [Investigating pertussis resurgence mini project](class18/class18.html)
 
-- Class 19 [Mini Project: Cancer Mutation Analysis](class19/class19_mutationalanalysis.html)
+- Class 19 [Mini Project: Cancer Mutation Analysis](class19/class19_mutationanalysis.html)
