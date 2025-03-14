@@ -28,10 +28,10 @@ Winter 2025 class content:
 
 - Class 15 Hands-on with Git and GitHub
 
-- Class 16 [Essential UNIX for bioinformatics]
+- Class 16 Essential UNIX for bioinformatics
 
-- Class 17 [Analyzing sequencing data in the cloud]
+- Class 17 [Analyzing sequencing data in the cloud](class17/class17.html)
 
 - Class 18 [Investigating pertussis resurgence mini project](class18/class18.html)
 
-- Class 19 [Mini Project: Cancer Mutation Analysis](lab19_YW.pdf)
+- Class 19 [Mini Project: Cancer Mutation Analysis](class19/class19_mutationalanalysis.html)
