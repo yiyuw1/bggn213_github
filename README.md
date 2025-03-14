@@ -4,10 +4,10 @@ My class work from [BGGN213](https://bioboot.github.io/bggn213_W25/) W25 at UC S
 
 Winter 2025 class content:
 
-- Class 04 [Intro to R]()
+- Class 04 [Intro to R](class/05/class4.html)
 
 - Class 05 [Data viz with ggplot2](class05/class5.html)
 
-- Class 06 [R functions](https://github.com/yiyuw1/bggn213_github/blob/main/class6/class6.qmd) 
+- Class 06 [R functions](class06/class6.html) 
 
-- Class 07 
+- Class 07 [Machine Learning](class07/class7MachineLearning.html)
